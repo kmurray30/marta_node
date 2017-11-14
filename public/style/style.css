@@ -1,0 +1,37 @@
+
+body {
+    /*font-family: 'Arvo', serif;*/
+    background: #B3C3EA;
+}
+
+#header {
+  background: #14264F;
+}
+
+  h1 {
+    color: white;
+    text-align: center;
+    font-size: 5em;
+    padding-bottom: 20px;
+  }
+
+
+#login-cnt {
+  padding: 20px 20vw 20px 20vw;
+}
+
+form {
+  padding-top: 10px;
+}
+
+.form-group {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.button-group {
+  /*margin: auto;*/
+  /*display: block;*/
+  padding-top: 10px;
+  text-align: center;
+}
