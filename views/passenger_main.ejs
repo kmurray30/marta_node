@@ -1,0 +1,46 @@
+<% include partials/header %>
+
+	    <!-- <link rel="stylesheet" href="style/passenger_main.css"> -->
+
+  </head>
+
+  <body>
+
+    <div class="container-fluid" id="header">
+      <h1>Welcome to MARTA Online</h1>
+    </div>
+
+    <div class="container" id="window-cnt">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Welcome</h3>
+        </div>
+        <form method="POST" action="/login">
+          <div class="form-group">
+            <label>Username:</label>
+            <input type="text" id="username-input" name="username" placeholder="Ex: John123" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="password-input" placeholder="8 character minimum" name="password" class="form-control" data-toggle="password">
+          </div>
+          <% if(errors){ %>
+						<% errors.forEach(function(error){ %>
+							<li>  <%= error.msg %>  </li>
+						<% }) %>
+					<% } %>
+          <% if(message){ %>
+          	<p>  <%= message %>  </p>
+          <% } %>
+          <div class="form-group button-group">
+            <button type="submit" class="btn btn-primary" id="login-btn">Log In</button>
+            <button class="btn btn-info" id="register-btn" formaction="/toregister">Register</button> <!-- move these outside of form to stop url changing -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+
+  <!-- // <script src="js/passenger_main.js"></script> -->
+
+<% include partials/footer %>

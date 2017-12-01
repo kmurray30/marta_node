@@ -1,0 +1,38 @@
+<% include partials/header %>
+
+	    <link rel="stylesheet" href="style/admin_main.css">
+
+  </head>
+
+  <body>
+
+    <div class="container-fluid" id="header">
+      <h1>Welcome to MARTA Online</h1>
+    </div>
+
+    <div class="container" id="window-cnt">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Administrator</h3>
+        </div>
+        <form method="GET" action="/admin_stationmanage" id="station-manage-btn">
+          <button type="submit" class="btn btn-primary">Station Management</button>
+        </form>
+        <form method="GET" action="/admin_suspendedcards">
+          <button type="submit" class="btn btn-primary">Suspended Cards</button>
+        </form>
+        <form method="GET" action="/admin_cardmanage">
+          <button type="submit" class="btn btn-primary">Breeze Card Management</button>
+        </form>
+        <form method="GET" action="/admin_flowreport">
+          <button type="submit" class="btn btn-primary">Passenger Flow Report</button>
+        </form>
+        <form method="GET" action="/" id="logout-btn">
+          <button type="submit" class="btn btn-primary">Log Out</button>
+        </form>
+      </div>
+    </div>
+  </body>
+
+
+<% include partials/footer %>

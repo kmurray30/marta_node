@@ -1,0 +1,13 @@
+form {
+	padding-top: 20px;
+	text-align: center;
+}
+
+#station-manage-btn {
+	/*padding-top: 20px;*/
+}
+
+#logout-btn {
+	padding-top: 40px;
+	padding-bottom: 20px;
+}

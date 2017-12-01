@@ -2,10 +2,34 @@
 body {
     /*font-family: 'Arvo', serif;*/
     background: #B3C3EA;
+    overflow-x: hidden;
 }
 
 #header {
   background: #14264F;
+}
+
+.right-text {
+  float: right;
+}
+
+.left-text {
+  display: inline;
+  clear: none;
+}
+
+.text {
+  color: gray;
+  font-size: 0.8em;
+}
+
+.clear {
+  margin: 10px;
+}
+
+.error {
+  color: red;
+  font-style: italic;
 }
 
   h1 {
@@ -16,17 +40,17 @@ body {
   }
 
 
-#login-cnt {
-  padding: 20px 20vw 20px 20vw;
+#window-cnt {
+  padding: 20px 0px 20px 0px;
+  width: 500px;
+  margin: auto;
 }
 
 form {
-  padding-top: 10px;
+  padding: 10px;
 }
 
 .form-group {
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
 .button-group {
@@ -34,4 +58,28 @@ form {
   /*display: block;*/
   padding-top: 10px;
   text-align: center;
+}
+
+.back-btn {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+
+#inline-textbox {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+#inline-label, #inline-input {
+  display: inline;
+  /*float: left;*/
+  /*clear: none;*/
+  margin-top: 10px;
+  /*margin-bottom: 10px;*/
+  width: auto;
+}
+
+#inner-box {
+  margin: 10px;
 }

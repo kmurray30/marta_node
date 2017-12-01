@@ -1,0 +1,54 @@
+<% include partials/header %>
+
+	    <!-- <link rel="stylesheet" href="style/admin.css"> -->
+
+  </head>
+
+  <body>
+
+    <div class="container-fluid" id="header">
+      <h1>Welcome to MARTA Online</h1>
+    </div>
+
+    <div class="container" id="window-cnt">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Station Detail - <%= station.Name %></h3>
+        </div>
+        <form method="GET" action="/admin_stationmanage?stationId=" class="back-btn">
+          <button type="submit" class="btn btn-primary">Back</button>
+        </form>
+        <form method="POST" action=<%= "/updatefare?stationId=" + station.StopID %>>
+          <h3 class="left-text"><b> <%= station.Name %> <b></h3>
+          <div class="right-text"><b> Stop <%= station.StopID %> <b></div>
+          <div class="form-group" id="inline-textbox">
+            <label id="inline-label">Fare</label>
+            <input type="text" id="inline-input" name="fare" value=<%= station.EnterFare %> class="form-control">
+            <button type="submit" class="btn btn-primary" id="update-fare-btn">Update Fare and Open/Close</button>
+          </div>
+          <div class="error">
+            <% if(messages){ %>
+              <% messages.forEach(function(message){ %>
+                <%= message %>
+              <% }) %>
+            <% } %>
+          </div>
+          <div class="left-text">Nearest Intersection:</div>
+          <div class="right-text">
+            <p> <%= station.Intersection %> <p>
+          </div>
+          <div class="clear">
+            <input type="checkbox" name="isOpen" value="Open" class="clear" id="checkbox" <% if(station.ClosedStatus == '0'){ %> checked <% } %> > Open Station
+            <p class="text"><em>When checked, passengers can enter at this station.<em></p> 
+          </div>
+        </form>
+        <form method="GET" action="/admin_main" class="back-btn">
+          <button type="submit" class="btn btn-primary">Return</button>
+        </form>
+      </div>
+    </div>
+  </body>
+
+  <script src="js/stationview.js"></script>
+
+<% include partials/footer %>

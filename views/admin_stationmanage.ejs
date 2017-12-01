@@ -1,0 +1,54 @@
+<% include partials/header %>
+
+	    <link rel="stylesheet" href="style/tables.css">
+      <script src="js/sorttable.js"></script>
+      <script src="js/tables.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="container-fluid" id="header">
+      <h1>Welcome to MARTA Online</h1>
+    </div>
+
+    <div class="container" id="window-cnt">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Station Listing</h3>
+        </div>
+        <form method="GET" action="/admin_main" class="back-btn">
+          <button type="submit" class="btn btn-primary">Back</button>
+        </form>
+        <div class="">
+          <table class="sortable">
+            <tr>
+              <th>Station Name</th>
+              <th>Stop ID</th> 
+              <th>Fare</th>
+              <th>Status</th>
+            </tr>
+            <% if(stations){ %>
+              <% stations.forEach(function(station){ %>
+                <tr class='table-row' data=<%= station.StopID %>>
+                  <td>  <%= station.Name %>  </td>
+                  <td class="stationId">  <%= station.StopID %>  </td>
+                  <td>  <%= station.EnterFare %>  </td>
+                  <td>  <%= station.ClosedStatus %>  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </table>
+        </div>
+        <!-- <form method="GET" action="/admin_createstation" id="station-manage-btn"> -->
+          <div class="form-group button-group">
+            <button type="submit" class="btn btn-primary" id="create-new-station-btn">Create New Station</button>
+            <button class="btn btn-primary" id="view-station-btn" formaction="stationview">View Station</button> <!-- move these outside of form to stop url changing -->
+          </div>
+        <!-- </form> -->
+      </div>
+    </div>
+  </body>
+
+
+<% include partials/footer %>
