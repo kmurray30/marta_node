@@ -6,7 +6,8 @@ var mysql = require('mysql');
 var session = require('express-session');
 var moment = require('moment');
 // var crypto = require('crypto');
-var passwordHash = require('password-hash');
+// var passwordHash = require('password-hash');
+var md5 = require('md5');
 const url = require('url');
 
 // var message;
@@ -14,13 +15,22 @@ const url = require('url');
 
 var app = express();
 
+// var db = mysql.createConnection({
+// 	// properties...
+// 	connectionLimit: 50,
+// 	host: 'localhost',
+// 	user: 'root',
+// 	password: '',
+// 	database: 'martanode'
+// });
+
 var db = mysql.createConnection({
 	// properties...
 	connectionLimit: 50,
-	host: 'localhost',
-	user: 'root',
-	password: '',
-	database: 'martanode'
+	host: 'academic-mysql.cc.gatech.edu',
+	user: 'cs4400_Group_46',
+	password: 'T62yYcnG',
+	database: 'cs4400_Group_46'
 });
 
 app.get('/createdb', (req, res) => {
@@ -144,7 +154,7 @@ app.post('/login', function(req, res){
 			// res.send(result);
 			if (result == null || result.length == 0) {
 				message = "Invalid username";
-			} else if (!passwordHash.verify(password, result[0].password)){
+			} else if (result[0].password != md5(password)){
 				message = "Wrong password"
 			} else {
 				// message = '  Hi ' + result[0].username + '! Your password is ' + result[0].password + ' lol';
@@ -214,7 +224,7 @@ app.post('/createaccount', function(req, res){
 	req.session.messageQ = [];
 	var username = req.body.username;
 	var password = req.body.password;
-	password = passwordHash.generate(password);
+	password = md5(password);
 	var confirm = req.body.confirm;
 	var email = req.body.email;
 	var cardnum = req.body.cardnum;

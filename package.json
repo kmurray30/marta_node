@@ -13,6 +13,7 @@
     "express": "*",
     "express-session": "^1.15.6",
     "express-validator": "^4.3.0",
+    "md5": "^2.2.1",
     "moment": "^2.19.3",
     "mysql": "^2.15.0",
     "password-hash": "^1.2.2"
