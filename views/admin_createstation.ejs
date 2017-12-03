@@ -1,7 +1,5 @@
 <% include partials/header %>
 
-	    <!-- <link rel="stylesheet" href="style/admin.css"> -->
-
   </head>
 
   <body>
@@ -10,37 +8,60 @@
       <h1>Welcome to MARTA Online</h1>
     </div>
 
-    <div class="container" id="window-cnt">
+    <div class="container-fluid" id="window-cnt">
       <div class="panel panel-primary">
         <div class="panel-heading">
           <h3 class="panel-title">Create New Station</h3>
         </div>
-        <form method="POST" action="/login">
+        <form method="POST" action="/createstation">
           <div class="form-group">
-            <label>Username:</label>
-            <input type="text" id="username-input" name="username" placeholder="Ex: John123" class="form-control">
+            <label>Station Name:</label>
+            <input type="text" id="station-name-input" name="stationName" placeholder="Ex: Dunwoody" class="form-control">
           </div>
           <div class="form-group">
-            <label>Password:</label>
-            <input type="password" id="password-input" placeholder="8 character minimum" name="password" class="form-control" data-toggle="password">
+            <label>Stop ID:</label>
+            <input type="text" id="stop-id-input" placeholder="Ex: BUSN11 or N11 or 12345" name="stationID" class="form-control">
           </div>
-          <% if(errors){ %>
-						<% errors.forEach(function(error){ %>
-							<li>  <%= error.msg %>  </li>
-						<% }) %>
-					<% } %>
-          <% if(message){ %>
-          	<p>  <%= message %>  </p>
-          <% } %>
+          <div class="form-group">
+            <label>Entry Fare:</label>
+            <input type="text" id="fare-input" placeholder="Ex: 2.50" name="fare" class="form-control">
+          </div>
+          
+
+          <div class="container-fluid" id="breeze-cnt">
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <h3 class="panel-title">Station Type</h3>
+              </div>
+              <div id="inner-box">
+                <input type="radio" name="isBus" value="true" checked> Bus Station<br>
+                <div class="form-group" id="inline-textbox">
+                  <label id="inline-label">Nearest Intersection</label>
+                  <input type="text" id="inline-input" name="intersection" placeholder="Peachtree" class="form-control">
+                </div>
+                <input type="radio" name="isBus" value="false"> Train Station
+              </div>
+            </div>
+          </div>
+
+          <div class="clear">
+            <input type="checkbox" name="isOpen" value="Open" class="clear" id="checkbox" checked> Open Station
+            <p class="text"><em>When checked, passengers can enter at this station.<em></p> 
+          </div>
+
+          <div class="error">
+            <% if(messages){ %>
+              <% messages.forEach(function(message){ %>
+                <%= message %> <br>
+              <% }) %>
+            <% } %>
+          </div>
           <div class="form-group button-group">
-            <button type="submit" class="btn btn-primary" id="login-btn">Log In</button>
-            <button class="btn btn-info" id="register-btn" formaction="/toregister">Register</button> <!-- move these outside of form to stop url changing -->
+            <button class="btn btn-info" id="create-btn">Create Station</button> <!-- move these outside of form to stop url changing -->
           </div>
         </form>
       </div>
     </div>
   </body>
-
-  <!-- // <script src="js/admin.js"></script> -->
 
 <% include partials/footer %>

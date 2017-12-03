@@ -1,6 +1,9 @@
 <% include partials/header %>
 
 	    <!-- <link rel="stylesheet" href="style/admin.css"> -->
+      <link rel="stylesheet" href="style/tables.css">
+      <script src="js/sorttable.js"></script>
+      <script src="js/tables.js"></script>
 
   </head>
 
@@ -15,28 +18,45 @@
         <div class="panel-heading">
           <h3 class="panel-title">Suspended Cards</h3>
         </div>
-        <form method="POST" action="/login">
-          <div class="form-group">
-            <label>Username:</label>
-            <input type="text" id="username-input" name="username" placeholder="Ex: John123" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Password:</label>
-            <input type="password" id="password-input" placeholder="8 character minimum" name="password" class="form-control" data-toggle="password">
-          </div>
-          <% if(errors){ %>
-						<% errors.forEach(function(error){ %>
-							<li>  <%= error.msg %>  </li>
-						<% }) %>
-					<% } %>
-          <% if(message){ %>
-          	<p>  <%= message %>  </p>
-          <% } %>
-          <div class="form-group button-group">
-            <button type="submit" class="btn btn-primary" id="login-btn">Log In</button>
-            <button class="btn btn-info" id="register-btn" formaction="/toregister">Register</button> <!-- move these outside of form to stop url changing -->
-          </div>
+        
+        <form method="GET" action="/admin_main" class="back-btn">
+          <button type="submit" class="btn btn-primary">Back</button>
         </form>
+        <div class="">
+          <table class="sortable">
+            <tr>
+              <th>Card #</th>
+              <th>New Owner</th> 
+              <th>Date Suspended</th>
+              <th>Previous Owner</th>
+            </tr> 
+            <% if(cards){ %>
+              <% cards.forEach(function(card){ %> <!-- fields are Number, Value, Username, DateTime -->
+                <tr class='table-row' data=<%= card.Number %> data2=<%= card.NewUser %>>
+                  <td>  <%= card.Number %>  </td>
+                  <td class="cardId">  <%= card.NewUser %>  </td>
+                  <td>  <%= hrt(card.DateTime, '%MM%-%DD%-%YYYY% %h%:%mm%') %>  </td>
+                  <td>  <%= card.OldUser %>  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </table>
+        </div>
+        <div class="error">
+          <% if(messages){ %>
+            <% messages.forEach(function(message){ %>
+              <%= message %> <br>
+            <% }) %>
+          <% } %>
+        </div>
+        <!-- <form method="GET" action="/admin_createcard" id="card-manage-btn"> -->
+        <div class="form-group button-group">
+          <button type="submit" class="btn btn-primary" id="assign-to-new-btn">Assign Selected Card to New Owner</button>
+          <button class="btn btn-primary" id="assign-to-prev-btn" formaction="cardview">Assign Selected Card to Previous Owner</button> <!-- move these outside of form to stop url changing -->
+        </div>
+        <p class="text"><em>Assigning the card to an owner will unlock all accounts conflicted on the same Breeze Card.<em></p> 
+        <!-- </form> -->
+
       </div>
     </div>
   </body>

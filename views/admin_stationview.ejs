@@ -21,10 +21,10 @@
         <form method="POST" action=<%= "/updatefare?stationId=" + station.StopID %>>
           <h3 class="left-text"><b> <%= station.Name %> <b></h3>
           <div class="right-text"><b> Stop <%= station.StopID %> <b></div>
-          <div class="form-group" id="inline-textbox">
-            <label id="inline-label">Fare</label>
-            <input type="text" id="inline-input" name="fare" value=<%= station.EnterFare %> class="form-control">
-            <button type="submit" class="btn btn-primary" id="update-fare-btn">Update Fare and Open/Close</button>
+          <div class="form-group inline-box">
+            <label class="inline-content">Fare</label>
+            <input type="text" class="inline-content" name="fare" value=<%= station.EnterFare %> class="form-control">
+            <button type="submit" class="btn btn-primary inline-content" id="update-fare-btn">Update Fare and Open/Close</button>
           </div>
           <div class="error">
             <% if(messages){ %>

@@ -5,10 +5,8 @@ table, th, td {
 
 table {
 	margin: 20px;
-	width: 390px;
+	width: auto;
 	margin: 0 auto;
-	margin-top: 20px;
-	margin-bottom: 20px;
 }
 
 .selected {
@@ -21,4 +19,8 @@ table {
 
 #station-manage-btn {
 
+}
+.row {
+	padding-bottom: 10px;
+	/*vertical-align: center;*/
 }

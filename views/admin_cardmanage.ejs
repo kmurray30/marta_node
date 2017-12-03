@@ -1,6 +1,9 @@
 <% include partials/header %>
 
-	    <!-- <link rel="stylesheet" href="style/admin.css"> -->
+      <!-- <link rel="stylesheet" href="style/admin.css"> -->
+      <link rel="stylesheet" href="style/tables.css">
+      <script src="js/sorttable.js"></script>
+      <script src="js/tables.js"></script>
 
   </head>
 
@@ -15,28 +18,110 @@
         <div class="panel-heading">
           <h3 class="panel-title">Breeze Card Management</h3>
         </div>
-        <form method="POST" action="/login">
-          <div class="form-group">
-            <label>Username:</label>
-            <input type="text" id="username-input" name="username" placeholder="Ex: John123" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Password:</label>
-            <input type="password" id="password-input" placeholder="8 character minimum" name="password" class="form-control" data-toggle="password">
-          </div>
-          <% if(errors){ %>
-						<% errors.forEach(function(error){ %>
-							<li>  <%= error.msg %>  </li>
-						<% }) %>
-					<% } %>
-          <% if(message){ %>
-          	<p>  <%= message %>  </p>
+        
+        <form method="GET" action="/admin_main" class="back-btn">
+          <button type="submit" class="btn btn-primary">Back</button>
+        </form>
+        
+        <div class="error">
+          <% if(messages){ %>
+            <% messages.forEach(function(message){ %>
+              <%= message %> <br>
+            <% }) %>
           <% } %>
-          <div class="form-group button-group">
-            <button type="submit" class="btn btn-primary" id="login-btn">Log In</button>
-            <button class="btn btn-info" id="register-btn" formaction="/toregister">Register</button> <!-- move these outside of form to stop url changing -->
+        </div>
+
+        <form method="POST" action="/filtercards">
+          <div class="container-fluid"> <!-- If Needed Left and Right Padding in 'md' and 'lg' screen means use container class -->
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Owner </label>
+                </div>
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <input type="text" id="owner-input" name="owner" placeholder="" class="form-control" <% if(owner){ %> value=<%= owner %> <% } %> >
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <input type="checkbox" name="showSuspended" value="show" class="clear" id="checkbox" <% if(showSus){ %> checked <% } %>> Show Suspended Cards
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Card Number </label>
+                </div>
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <input type="text" id="owner-input" name="cardnum" placeholder="" class="form-control" <% if(cardnum){ %> value=<%= cardnum %> <% } %> >
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <button type="button" class="btn btn-info" id="reset-filter-btn" formaction="/nofilter">Reset</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Value Between </label>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    <input type="text" id="owner-input" name="low" placeholder="0" class="form-control" <% if(low){ %> value=<%= low %> <% } %> >
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                    and
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    <input type="text" id="owner-input" name="high" placeholder="inf" class="form-control" <% if(high){ %> value=<%= high %> <% } %> >
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <button type="submit" class="btn btn-info" id="update-filter-btn">Update Filter</button>
+                </div>
+            </div>
           </div>
         </form>
+
+        <div class="">
+          <table class="sortable">
+            <tr>
+              <th>Card #</th>
+              <th>Value</th> 
+              <th>Owner</th>
+            </tr> 
+            <% if(cards){ %>
+              <% cards.forEach(function(card){ %> <!-- fields are Number, Value, Username, DateTime -->
+                <tr class='table-row' data=<%= card.Number %>>
+                  <td>  <%= card.Number %>  </td>
+                  <td class="cardId">  $<%= card.Value %>  </td>
+                  <td>  <%= card.Username %>  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </table>
+        </div>
+        <div class="error">
+          <% if(messages){ %>
+            <% messages.forEach(function(message){ %>
+              <%= message %> <br>
+            <% }) %>
+          <% } %>
+        </div>
+        <div class="container-fluid"> <!-- If Needed Left and Right Padding in 'md' and 'lg' screen means use container class -->
+            <div class="row">
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <input type="text" id="value-input" name="owner" placeholder="" class="form-control">
+                </div>
+                <div class="col-5 col-sm-5 col-md-5 col-lg-5">
+                    <button class="btn btn-info" id="set-value-btn">Set Value of Selected Card</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <input type="text" id="transfer-input" name="owner" placeholder="" class="form-control">
+                </div>
+                <div class="col-5 col-sm-5 col-md-5 col-lg-5">
+                    <button class="btn btn-info" id="transfer-card-btn">Transfer Selected Card</button>
+                </div>
+            </div>
+        </div>
       </div>
     </div>
   </body>

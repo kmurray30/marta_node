@@ -1,6 +1,7 @@
 <% include partials/header %>
 
 	    <!-- <link rel="stylesheet" href="style/passenger_main.css"> -->
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
   </head>
 
@@ -15,28 +16,175 @@
         <div class="panel-heading">
           <h3 class="panel-title">Welcome</h3>
         </div>
-        <form method="POST" action="/login">
-          <div class="form-group">
-            <label>Username:</label>
-            <input type="text" id="username-input" name="username" placeholder="Ex: John123" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Password:</label>
-            <input type="password" id="password-input" placeholder="8 character minimum" name="password" class="form-control" data-toggle="password">
-          </div>
-          <% if(errors){ %>
-						<% errors.forEach(function(error){ %>
-							<li>  <%= error.msg %>  </li>
-						<% }) %>
-					<% } %>
-          <% if(message){ %>
-          	<p>  <%= message %>  </p>
+        <div class="error">
+          <% if(messages){ %>
+            <% messages.forEach(function(message){ %>
+              <%= message %> <br>
+            <% }) %>
           <% } %>
-          <div class="form-group button-group">
-            <button type="submit" class="btn btn-primary" id="login-btn">Log In</button>
-            <button class="btn btn-info" id="register-btn" formaction="/toregister">Register</button> <!-- move these outside of form to stop url changing -->
-          </div>
-        </form>
+        </div>
+
+
+
+
+
+
+
+
+
+        <% if(!isRiding) { %>
+        <div class="container-fluid" id="box"> <!-- If Needed Left and Right Padding in 'md' and 'lg' screen means use container class -->
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Breeze Card </label>
+                </div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="dropdown">
+                   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><%= cardnum %> ↓ 
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <% if(cards){ %>
+                          <% cards.forEach(function(card){ %>
+                            <a href= <%= "./passenger_main?cardnum=" + card.Number %> class="w3-bar-item w3-button"> <%= card.Number %> </a>
+                          <% }) %>
+                        <% } %>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <a href="./passenger_cardmanage">Manage Cards</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Balance </label>
+                </div>
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    $<%= value %>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Start At </label>
+                </div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="w3-dropdown-hover">
+                    <button class="w3-button"><%= startName + " - $" + fare %>  ↓ </button>
+                    <div class="w3-dropdown-content w3-bar-block w3-border">
+                      <% if(stations){ %>
+                        <% stations.forEach(function(station){ %>
+                          <a href= <%= "./passenger_main?startid=" + encodeURIComponent(station.StopID) %> class="w3-bar-item w3-button"><%= station.Name + " - $" + station.EnterFare %> </a>
+                        <% }) %>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <a href= <%= "./starttrip?startid=" + encodeURIComponent(startID) + "&cardnum=" + cardnum %> >Start Trips</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>End At </label>
+                </div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="w3-dropdown-hover">
+                      N/A
+                  </div>
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+        <% } else { %>
+        <div class="container-fluid"> <!-- If Needed Left and Right Padding in 'md' and 'lg' screen means use container class -->
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Breeze Card </label>
+                </div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="dropdown">
+                   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><%= cardnum %> ↓ 
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                      <li>You can't switch cards while on a trip</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <a href="./passenger_cardmanage">Manage Cards</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Balance </label>
+                </div>
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    $<%= value %>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Started At </label>
+                </div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="w3-dropdown-hover">
+                    <%= startName + " - $" + fare %>
+                  </div>
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>End At </label>
+                </div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="w3-dropdown-hover">
+                    <button class="w3-button"><%= endStation %> ↓ </button>
+                    <div class="w3-dropdown-content w3-bar-block w3-border">
+                      <% if(stations){ %>
+                        <% stations.forEach(function(station){ %>
+                          <a href= <%= "./passenger_main?endid=" + encodeURIComponent(station.StopID) %> class="w3-bar-item w3-button"><%= station.Name %></a>
+                        <% }) %>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <a href= <%= "./endtrip?endid=" + encodeURIComponent(endID) + "&startid=" + encodeURIComponent(startID) + "&cardnum=" + cardnum %> >End Trip</a>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <div class="form-group button-group" style="padding: 30px">
+          <a href="./passenger_triphistory"><button class="btn btn-primary" id="view-station-btn" formaction="stationview" style="float: left">View Trip History</button></a>
+          <a href="."><button class="btn btn-primary" id="create-new-station-btn" style="float: right">Logout</button></a>
+        </div>
+
+
       </div>
     </div>
   </body>

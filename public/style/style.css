@@ -3,6 +3,7 @@ body {
     /*font-family: 'Arvo', serif;*/
     background: #B3C3EA;
     overflow-x: hidden;
+    height: 1200px;
 }
 
 #header {
@@ -42,8 +43,16 @@ body {
 
 #window-cnt {
   padding: 20px 0px 20px 0px;
-  width: 500px;
+  width: 750px;
   margin: auto;
+}
+
+.container-fluid {
+  /*margin: 10px;*/
+}
+
+.dropdown {
+  z-index: 999;
 }
 
 form {
@@ -66,12 +75,12 @@ form {
 }
 
 
-#inline-textbox {
+.inline-box {
   text-align: left;
   margin-bottom: 10px;
 }
 
-#inline-label, #inline-input {
+.inline-content {
   display: inline;
   /*float: left;*/
   /*clear: none;*/

@@ -34,7 +34,7 @@
                   <td>  <%= station.Name %>  </td>
                   <td class="stationId">  <%= station.StopID %>  </td>
                   <td>  <%= station.EnterFare %>  </td>
-                  <td>  <%= station.ClosedStatus %>  </td>
+                  <td>  <% if(station.ClosedStatus) { %> Closed <% } else { %> Open <% } %>  </td>
                 </tr>
               <% }) %>
             <% } %>

@@ -1,0 +1,88 @@
+<% include partials/header %>
+
+	    <link rel="stylesheet" href="style/tables.css">
+      <script src="js/sorttable.js"></script>
+      <script src="js/tables.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="container-fluid" id="header">
+      <h1>Welcome to MARTA Online</h1>
+    </div>
+
+    <div class="container" id="window-cnt">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Manage Cards</h3>
+        </div>
+        <form method="GET" action="/admin_main" class="back-btn">
+          <button type="submit" class="btn btn-primary">Back</button>
+        </form>
+        <h2> Breeze Cards </h2>
+        <div class="">
+          <table class="sortable">
+            <tr>
+              <th>Card Number</th>
+              <th>Value</th> 
+              <th>Remove</th>
+            </tr>
+            <% if(cards){ %>
+              <% cards.forEach(function(card){ %>
+                <tr class='table-row' data=<%= card.StopID %>>
+                  <td>  <%= card.Number %>  </td>
+                  <td class="stationId">  <%= card.Value %>  </td>
+                  <td> <a href= <%= "./removeCard?cardnum=" + card.Number %> class='btn btn-primary' style="margin: 5px"> Remove </a> </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </table>
+        </div>
+
+          <div class="container-fluid" id="breeze-cnt">
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <h3 class="panel-title">Breeze Card</h3>
+              </div>
+              
+              <div class="container-fluid" id="box"> <!-- If Needed Left and Right Padding in 'md' and 'lg' screen means use container class -->
+                <div class="row">
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                        <label>Balance </label>
+                    </div>
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                        <input type="text" id="inline-input" name="cardnum" placeholder="1234567890123456" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                        <label>Start At </label>
+                    </div>
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                      <div class="w3-dropdown-hover">
+                        <input type="text" id="inline-input" name="cardnum" placeholder="1234567890123456" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                      <button type="submit" class="btn btn-primary" id="create-new-station-btn">Create</button>
+                    </div>
+              </div>
+          </div>
+      </div>
+
+          </div>
+        <!-- <form method="GET" action="/admin_createstation" id="station-manage-btn"> -->
+          <div class="form-group button-group">
+            <button type="submit" class="btn btn-primary" id="create-new-station-btn">Create New Station</button>
+            <button class="btn btn-primary" id="view-station-btn" formaction="stationview">View Station</button> <!-- move these outside of form to stop url changing -->
+          </div>
+        <!-- </form> -->
+      </div>
+    </div>
+  </body>
+
+
+<% include partials/footer %>

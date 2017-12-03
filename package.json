@@ -9,14 +9,18 @@
   "dependencies": {
     "body-parser": "*",
     "crypto": "^1.0.1",
+    "datetime": "0.0.3",
     "ejs": "^2.5.7",
     "express": "*",
     "express-session": "^1.15.6",
     "express-validator": "^4.3.0",
+    "human-readable-time": "^0.3.0",
     "md5": "^2.2.1",
     "moment": "^2.19.3",
     "mysql": "^2.15.0",
-    "password-hash": "^1.2.2"
+    "node-datetime": "^2.0.3",
+    "password-hash": "^1.2.2",
+    "sleep": "^5.1.1"
   },
   "author": "Kyle Murray",
   "license": "ISC"
