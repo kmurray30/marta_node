@@ -1223,8 +1223,15 @@ app.get('/passenger_triphistory', function(req, res){
 		return
 	}
 
-	console.log('passenger_triphistory')
-	res.render('passenger_triphistory', {
+	var sql = "SELECT StartTime, StartsStopID, EndsStopID, CurrentFare, BREEZE_CARD.Number FROM TRIP LEFT JOIN BREEZE_CARD ON TRIP.Number = BREEZE_CARD.Number WHERE Username = '" + req.session.username + "'";
+	var query = db.query(sql, (err, result) => {
+		if(err) throw err;
+		console.log('passenger_triphistory')
+		messages = getMessages(req);
+		res.render('passenger_triphistory', {
+			data: result,
+			messages: messages
+		});
 	});
 });
 
