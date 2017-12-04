@@ -10,7 +10,6 @@ var moment = require('moment');
 var md5 = require('md5');
 var hrt = require('human-readable-time');
 var datetime = require('node-datetime');
-var sleep = require('sleep');
 const url = require('url');
 
 // var message;
@@ -607,6 +606,9 @@ app.get('/unlock', function(req, res){
 			console.log("Queried card from table. There should be a result but there isn't");
 			throw err;
 		}
+		if (!OldUser) {
+
+		}
 		var origQuery = result;
 		// Delete all rows in this conflict with same card
 		var sql = "DELETE FROM CONFLICT WHERE Number = '" + cardnum + "'";
@@ -1051,7 +1053,7 @@ app.get('/removecard', function(req, res){
 	var cardnum = req.session.cardnum;
 	var sql = "DELETE FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
 	var query = db.query(sql, (err, result) => {
-		
+
 	}
 
 });
