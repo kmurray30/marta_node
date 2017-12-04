@@ -9,9 +9,9 @@ $(document).ready(function() {
 		console.log("selected = " + selectedId);
 		selectedUser = $(this).attr("data2"); // This is the username
 		console.log("user = " + selectedUser)
-		// if ($(this).attr("username") !== typeof undefined) {
-
-		// }
+		if ($('#selectedSecretBox').length > 0) {
+			$('#selectedSecretBox').val(selectedId);
+		}
 	});
 
 	$('#view-station-btn').click(function() {
@@ -98,6 +98,18 @@ $(document).ready(function() {
 	// 	url = url.substring(0, url.lastIndexOf("/"));
 	// 	url += "/removeCard";
 	// 	window.location.href = url;
+	// });
+
+	// $('#add-value-btn').click(function() {
+	// 	if (selectedId == '') {
+	// 		alert("Please select card");
+	// 	} else {
+	// 		// alert($('#transfer-input').val());
+	// 		url = window.location.href
+	// 		url = url.substring(0, url.lastIndexOf("/"));
+	// 		url += "/addcardvalue?cardnum=" + selectedId + "&cc=" + $('#cc-input').val() + "&val=" + $('#value-input').val();
+	// 		window.location.href = url;
+	// 	}
 	// });
 
 

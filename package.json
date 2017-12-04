@@ -20,6 +20,7 @@
     "mysql": "^2.15.0",
     "node-datetime": "^2.0.3",
     "password-hash": "^1.2.2",
+    "replace": "^0.3.0",
     "sleep": "^5.1.1"
   },
   "author": "Kyle Murray",
