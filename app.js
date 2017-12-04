@@ -828,16 +828,13 @@ app.get('/admin_flowreport', function(req, res){
 	console.log(startTime);
 	console.log(endTime);
 
-	var dropFlowInSql = "DROP VIEW FlowIn";
-	var dropFlowOutSql = "DROP VIEW FlowOut";
-
-	var createFlowInSql = "CREATE VIEW FlowIn AS SELECT TRIP.StartsStopID AS StopID, SUM(STATION.EnterFare) AS Revenue, COUNT(*) As PassengersIn FROM TRIP, STATION JOIN TRIP t ON t.StartsStopID = STATION.StopID"
+	var createFlowInSql = "CREATE OR REPLACE VIEW FlowIn AS SELECT TRIP.StartsStopID AS StopID, SUM(STATION.EnterFare) AS Revenue, COUNT(*) As PassengersIn FROM TRIP, STATION JOIN TRIP t ON t.StartsStopID = STATION.StopID"
 	if(startTime && endTime) {
             createFlowInSql += " WHERE t.StartTime > '" + startTime + "' AND t.StartTime < '" + endTime + "'";
 	}
 	createFlowInSql += " GROUP BY TRIP.StartsStopID";
 
-	var createFlowOutSql = "CREATE VIEW FlowOut AS SELECT TRIP.EndsStopID AS StopID, COUNT(*) As PassengersOut FROM TRIP, STATION JOIN TRIP t ON t.EndsStopID = StopID"
+	var createFlowOutSql = "CREATE OR REPLACE VIEW FlowOut AS SELECT TRIP.EndsStopID AS StopID, COUNT(*) As PassengersOut FROM TRIP, STATION JOIN TRIP t ON t.EndsStopID = StopID"
 	if(startTime && endTime) {
             createFlowOutSql += " WHERE t.StartTime > '" + startTime + "' AND t.StartTime < '" + endTime + "'";
 	}
@@ -845,34 +842,26 @@ app.get('/admin_flowreport', function(req, res){
 
 	var getFlowSql = "SELECT Name, PassengersIn, PassengersOut, PassengersIn - PassengersOut AS Flow, Revenue FROM (SELECT FlowIn.StopID, PassengersIn, PassengersOut, PassengersIn - PassengersOut AS Flow, Revenue FROM FlowIn JOIN FlowOut ON FlowIn.StopID = FlowOut.StopID) AS T JOIN STATION ON T.StopID = STATION.StopID";
 
-	var query = db.query(dropFlowInSql, (err, result) => {
-            if(err) throw err;
+	var query = db.query(createFlowInSql, (err, result) => {
+	    if(err) throw err;
 
-	    var query = db.query(dropFlowOutSql, (err, result) => {
-	    	if(err) throw err;
+	    var query = db.query(createFlowOutSql, (err, result) => {
+	        if(err) throw err;
 
-	        var query = db.query(createFlowInSql, (err, result) => {
+	        var query = db.query(getFlowSql, (err, result) => {
 	            if(err) throw err;
+	            console.log("Result from query:");
+	            console.log(result);
+		    messages = getMessages(req);
+	            res.render('admin_flowreport', {
+	            	messages: messages,
+	            	start: startTime,
+	            	end: endTime,
+                        flows: result
 
-	            var query = db.query(createFlowOutSql, (err, result) => {
-	                if(err) throw err;
-			
-	                var query = db.query(getFlowSql, (err, result) => {
-	                    if(err) throw err;
-	                    console.log("Result from query:");
-	                    console.log(result);
-			    messages = getMessages(req);
-	    	            res.render('admin_flowreport', {
-	    	            	messages: messages,
-	    	            	start: startTime,
-	    	            	end: endTime,
-                                flows: result
-
-	                    });
-	                });
-	           });
-	       });
-          });
+	            });
+	        });
+	   });
      });
 });
 
