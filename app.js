@@ -1098,6 +1098,27 @@ app.get('/removecard', function(req, res){
 });
 
 app.post('/addcard', function(req, res) {
+	console.log("GET /removecard");
+	if (req.session == null) {
+		return res.status(401).send();
+	}
+	if (!req.session.user) {
+		res.redirect('/')
+		return;
+	}
+	var cardnum = req.body.cardnum;
+	if (isNaN(cardnum) || cardnum.length != 16) {
+		req.session.messageQ.push("Invalid card format. Please use exactly 16 digits");
+		res.redirect('/passenger_cardmanage');
+		return;
+	}
+	var sql = "SELECT Username FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
+	var query = db.query(sql, (err, result) => {
+		if(err) throw err;
+		var oldUser = result[0].Username;
+	});
+
+	res.redirect('/passenger_cardmanage');
 
 });
 
