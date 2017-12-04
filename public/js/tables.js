@@ -93,4 +93,13 @@ $(document).ready(function() {
 		window.location.href = url;
 	});
 
+	// $('#remove-btn').click(function() {
+	// 	url = window.location.href
+	// 	url = url.substring(0, url.lastIndexOf("/"));
+	// 	url += "/removeCard";
+	// 	window.location.href = url;
+	// });
+
+
+
 });

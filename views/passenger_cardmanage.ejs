@@ -17,10 +17,10 @@
         <div class="panel-heading">
           <h3 class="panel-title">Manage Cards</h3>
         </div>
-        <form method="GET" action="/admin_main" class="back-btn">
+        <form method="POST" action="/addcard" class="back-btn">
           <button type="submit" class="btn btn-primary">Back</button>
         </form>
-        <h2> Breeze Cards </h2>
+        <h2 style="margin-left: 30px"> Breeze Cards </h2>
         <div class="">
           <table class="sortable">
             <tr>
@@ -33,53 +33,62 @@
                 <tr class='table-row' data=<%= card.StopID %>>
                   <td>  <%= card.Number %>  </td>
                   <td class="stationId">  <%= card.Value %>  </td>
-                  <td> <a href= <%= "./removeCard?cardnum=" + card.Number %> class='btn btn-primary' style="margin: 5px"> Remove </a> </td>
+                  <td> <a href= <%= "./removecard?cardnum=" + card.Number %> class='btn btn-primary remove-btn' style="margin: 5px"> Remove </a> </td>
                 </tr>
               <% }) %>
             <% } %>
           </table>
         </div>
 
+
+          
+          <div class="container-fluid" id="box"> <!-- If Needed Left and Right Padding in 'md' and 'lg' screen means use container class -->
+                <div class="row" style="padding: 20px">
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    </div>
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                      <div class="w3-dropdown-hover">
+                        <input type="text" id="inline-input" name="cardnum" placeholder="0000 0000 0000 0000" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                      <button type="submit" class="btn btn-primary" id="create-new-station-btn">Add Card</button>
+                    </div>
+                </div>
+
           <div class="container-fluid" id="breeze-cnt">
             <div class="panel panel-info">
               <div class="panel-heading">
-                <h3 class="panel-title">Breeze Card</h3>
+                <h3 class="panel-title">Add Value to Selected Card</h3>
               </div>
               
               <div class="container-fluid" id="box"> <!-- If Needed Left and Right Padding in 'md' and 'lg' screen means use container class -->
-                <div class="row">
+                <div class="row" style="padding-top: 20px">
                     <div class="col-3 col-sm-3 col-md-3 col-lg-3">
-                        <label>Balance </label>
+                        <label>Credit Card # </label>
                     </div>
                     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                        <input type="text" id="inline-input" name="cardnum" placeholder="1234567890123456" class="form-control">
+                        <input type="text" id="inline-input" name="cardnum" placeholder="" class="form-control">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-3 col-sm-3 col-md-3 col-lg-3">
-                        <label>Start At </label>
+                        <label>Value </label>
                     </div>
                     <div class="col-4 col-sm-4 col-md-4 col-lg-4">
                       <div class="w3-dropdown-hover">
-                        <input type="text" id="inline-input" name="cardnum" placeholder="1234567890123456" class="form-control">
+                        <input type="text" id="inline-input" name="cardnum" placeholder="" class="form-control">
                       </div>
                     </div>
                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                      <button type="submit" class="btn btn-primary" id="create-new-station-btn">Create</button>
+                      <button type="submit" class="btn btn-primary" id="create-new-station-btn" formaction="/addcardvalue">Add Value</button>
                     </div>
-              </div>
+                </div>
           </div>
       </div>
 
-          </div>
-        <!-- <form method="GET" action="/admin_createstation" id="station-manage-btn"> -->
-          <div class="form-group button-group">
-            <button type="submit" class="btn btn-primary" id="create-new-station-btn">Create New Station</button>
-            <button class="btn btn-primary" id="view-station-btn" formaction="stationview">View Station</button> <!-- move these outside of form to stop url changing -->
-          </div>
-        <!-- </form> -->
       </div>
     </div>
   </body>

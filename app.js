@@ -229,8 +229,8 @@ app.post('/createaccount', function(req, res){
 	console.log("GET createaccount");
 	req.session.messageQ = [];
 	var username = req.body.username;
-	var password = req.body.password;
-	password = md5(password);
+	var passwordOrig = req.body.password;
+	password = md5(passwordOrig);
 	var confirm = req.body.confirm;
 	confirm = md5(confirm);
 	var email = req.body.email;
@@ -251,7 +251,7 @@ app.post('/createaccount', function(req, res){
 		req.session.messageQ.push("Passwords do not match");
 		res.redirect('/register');
 		return;
-	} else if (password.length < 8) {
+	} else if (passwordOrig.length < 8) {
 		req.session.messageQ.push("Passwords must be at least 8 characters");
 		res.redirect('/register');
 		return;
@@ -279,7 +279,7 @@ app.post('/createaccount', function(req, res){
 
 function checkCardAddUser(req, res, username, password, email, cardnum, hasCard) {
 	if (hasCard) {
-		var sql = "SELECT * FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
+		var sql = "SELECT Username FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
 		var query = db.query(sql, (err, result) => {
 			if(err) throw err
 			if (result.length == 0) { // didn't find existing card
@@ -287,8 +287,11 @@ function checkCardAddUser(req, res, username, password, email, cardnum, hasCard)
 				res.redirect('/register');
 				return;
 			} else {
-				dateTime =  moment().format('YYYY/MM/DD HH:mm:ss')
-				sql = "INSERT INTO CONFLICT (Username, Number, DateTime) VALUES ('" + username + "', '" + cardnum + "', '" + dateTime + "')";
+				dateTime =  moment().format('YYYY/MM/DD HH:mm:ss');
+				sql = '';
+				if (result[0].Username) {
+					sql = "INSERT INTO CONFLICT (Username, Number, DateTime) VALUES ('" + username + "', '" + cardnum + "', '" + dateTime + "')";
+				}
 				addUser(req, res, username, password, email, sql)
 			}
 		});
@@ -336,13 +339,11 @@ function addUser(req, res, username, password, email, conflict) {
 					if(err) throw err;
 					console.log("Created CONFLICT: '" + conflict + "");
 					req.session.user = true;
-					sleep(2);
-					res.redirect('/passenger_main');
+					res.redirect('/');
 				});
 			} else {
 				req.session.user = true;
-				sleep(2);
-				res.redirect('/passenger_main');
+				res.redirect('//');
 			}
 		}
 	});
@@ -1035,6 +1036,21 @@ app.get('/passenger_cardmanage', function(req, res){
 			cards: result
 		});
 	});
+});
+
+app.get('/removecard', function(req, res){
+	console.log("GET /removecard");
+	if (req.session == null) {
+		return res.status(401).send();
+	}
+	if (!req.session.user) {
+		res.redirect('/')
+		return
+	}
+
+	var cardnum = req.session.cardnum;
+	var sql = "DELETE FROM "
+
 });
 
 app.get('/passenger_triphistory', function(req, res){
