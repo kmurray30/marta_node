@@ -342,7 +342,7 @@ function addUser(req, res, username, password, email, conflict) {
 				});
 			} else {
 				req.session.user = true;
-				res.redirect('//');
+				res.redirect('/');
 			}
 		}
 	});
