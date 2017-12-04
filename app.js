@@ -1055,7 +1055,7 @@ app.get('/passenger_cardmanage', function(req, res){
 
 	var username = req.session.username;
 
-	var sql = "SELECT Number, Value FROM BREEZE_CARD WHERE Username = '" + username + "'";
+	var sql = "SELECT Number, Value FROM BREEZE_CARD WHERE Username = '" + username + "' AND NOT EXISTS (SELECT * FROM CONFLICT WHERE BREEZE_CARD.Number = CONFLICT.Number)";
 	var query = db.query(sql, (err, result) => {
 		req.session.cardCount = result.length;
 		console.log('passenger_cardmanage')
@@ -1098,7 +1098,7 @@ app.get('/removecard', function(req, res){
 });
 
 app.post('/addcard', function(req, res) {
-	console.log("GET /removecard");
+	console.log("POST /addcard");
 	if (req.session == null) {
 		return res.status(401).send();
 	}
@@ -1106,20 +1106,111 @@ app.post('/addcard', function(req, res) {
 		res.redirect('/')
 		return;
 	}
-	var cardnum = req.body.cardnum;
+	var cardnum = req.body.cardnum[0];
+	console.log("cardnum: " + cardnum);
 	if (isNaN(cardnum) || cardnum.length != 16) {
 		req.session.messageQ.push("Invalid card format. Please use exactly 16 digits");
 		res.redirect('/passenger_cardmanage');
 		return;
 	}
-	var sql = "SELECT Username FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
+	var username = req.session.username;
+	var sql = "SELECT Number FROM BREEZE_CARD WHERE Username = '" + username + "'";
+	console.log(sql);
 	var query = db.query(sql, (err, result) => {
 		if(err) throw err;
-		var oldUser = result[0].Username;
+		var alreadyOwns = false;
+		result.forEach(function(card) {
+			if (card.Number == cardnum) alreadyOwns = true;
+		});
+		if (alreadyOwns) {
+			req.session.messageQ.push("You already have this card silly goose");
+			res.redirect('/passenger_cardmanage');
+			return
+		} else {
+			var sql = "SELECT Username FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
+			var query = db.query(sql, (err, result) => {
+				if(err) throw err;
+				if (result.length == 0) {
+					// Create new breeze card
+					var sql = "INSERT INTO BREEZE_CARD (Number, Value, Username) VALUES ('" + cardnum + "', " + 0 + ", '" + username + "')";
+					console.log(sql);
+					var query = db.query(sql, (err, result) => {
+						if(err) throw err;
+						console.log("Created BREEZE_CARD: '" + cardnum + "', '" + username + "");
+						req.session.messageQ.push("Created breeze card " + cardnum);
+						res.redirect('/passenger_cardmanage');
+						return;
+					});
+				} else if (result[0].Username) {
+					var oldUser = result[0].Username;
+					sql = "INSERT IGNORE INTO CONFLICT (DateTime, Username, Number) Value ('" + moment().format('YYYY/MM/DD HH:mm:ss') + "', '" + username + "', '" + cardnum + "')";
+					console.log(sql);
+					var query = db.query(sql, (err, result) => {
+						if(err) throw err;
+						req.session.messageQ.push("Conflict added for card " + cardnum);
+						res.redirect('/passenger_cardmanage');
+						return;
+					});
+				} else {
+					sql = "UPDATE BREEZE_CARD SET Username = '" + username + "' WHERE Number = '" + cardnum + "'";
+					console.log(sql);
+					var query = db.query(sql, (err, result) => {
+						if(err) throw err;
+						req.session.messageQ.push("User added as owner of existing card " + cardnum);
+						res.redirect('/passenger_cardmanage');
+						return;
+					});
+				}
+			});
+		}
 	});
+});
 
-	res.redirect('/passenger_cardmanage');
-
+app.post('/addcardvalue', function(req, res) {
+	console.log("POST /addcardvalue");
+	var cardnum = req.body.cardnum[1];
+	var value = req.body.cardval;
+	var ccnum = req.body.ccnum;
+	console.log("cardnum: " + cardnum + "\nvalue: " + value + "\nccnum: " + ccnum);
+	if (!cardnum) {
+		req.session.messageQ.push("select a dang card");
+		res.redirect('passenger_cardmanage');
+		return;
+	}
+	if (isNaN(ccnum) || ccnum.length != 16) {
+		req.session.messageQ.push("invalid credit card number. 16 digits fool");
+		res.redirect('passenger_cardmanage');
+		return;
+	}
+	if (isNaN(value) || value < 0) {
+		req.session.messageQ.push("invalid input. positive number");
+		res.redirect('passenger_cardmanage');
+		return;
+	}
+	var sql = "SELECT Value FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
+	var query = db.query(sql, (err, result) => {
+		if(err) throw err;
+		var currVal = result[0].Value;
+		currVal = parseFloat(currVal);
+		value = parseFloat(value);
+		console.log("current value: " + currVal)
+		console.log("new value: " + value)
+		var total = currVal + value;
+		console.log("total value: " + total)
+		if (total < 0 || total > 1000) {
+			req.session.messageQ.push("card exceeds limits");
+			res.redirect('passenger_cardmanage');
+			return;
+		} else {
+			sql = "UPDATE BREEZE_CARD SET Value = " + total + " WHERE Number = '" + cardnum + "'";
+			var query = db.query(sql, (err, result) => {
+				if(err) throw err;
+				req.session.messageQ.push("$" + value + " added to your card!");
+				res.redirect('passenger_cardmanage');
+				return;
+			});
+		}
+	});
 });
 
 app.get('/passenger_triphistory', function(req, res){
