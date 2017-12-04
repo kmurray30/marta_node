@@ -63,11 +63,24 @@
         <div class="">
           <table class="sortable">
             <tr>
-              <th>Card #</th>
-              <th>Value</th> 
-              <th>Owner</th>
+              <th>Station Name</th>
+              <th># Passengers In</th> 
+              <th># Passengers Out</th>
+              <th>Flow</th>
+              <th>Revenue</th>
             </tr>
             <!-- table stuff here -->
+            <%if(flows){ %>
+              <% flows.forEach(function(flow){ %>
+                <tr class='table-row' data=<%= flow.Name %>>
+                  <td> <%= flow.Name %> </td>
+                  <td> <%= flow.PassengersIn %> </td>
+                  <td> <%= flow.PassengersOut %> </td>
+                  <td> <%= flow.Flow %> </td>
+                  <td> $<%= flow.Revenue %> </td>
+                </tr>
+              <% }) %>
+            <% } %>
           </table>
         </div>
         <div class="error">
