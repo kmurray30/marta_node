@@ -57,7 +57,7 @@ $(document).ready(function() {
 	$('#reset-filter-btn').click(function() {
 		url = window.location.href
 		url = url.substring(0, url.lastIndexOf("/"));
-		url += "/admin_cardmanage";
+		url += "/passenger_triphistory";
 		window.location.href = url;
 	});
 
@@ -87,6 +87,13 @@ $(document).ready(function() {
 	});
 
 	$('#reset-flow-filter-btn').click(function() {
+		url = window.location.href
+		url = url.substring(0, url.lastIndexOf("/"));
+		url += "/admin_flowreport";
+		window.location.href = url;
+	});
+
+	$('#reset-history-filter-btn').click(function() {
 		url = window.location.href
 		url = url.substring(0, url.lastIndexOf("/"));
 		url += "/admin_flowreport";

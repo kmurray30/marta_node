@@ -1255,16 +1255,35 @@ app.get('/passenger_triphistory', function(req, res){
 		return
 	}
 
+	startTime = req.query.start;
+	endTime = req.query.end;
+
 	var sql = "SELECT StartTime, StartsStopID, EndsStopID, CurrentFare, BREEZE_CARD.Number FROM TRIP LEFT JOIN BREEZE_CARD ON TRIP.Number = BREEZE_CARD.Number WHERE Username = '" + req.session.username + "'";
+	if(startTime) sql += " AND StartTime > '" + startTime + "' AND StartTime < '" + endTime + "'";
+	console.log(sql)
 	var query = db.query(sql, (err, result) => {
 		if(err) throw err;
-		console.log('passenger_triphistory')
 		messages = getMessages(req);
 		res.render('passenger_triphistory', {
 			data: result,
-			messages: messages
+			messages: messages,
+			startTime: startTime,
+			endTime: endTime
 		});
 	});
+});
+
+app.post('/historyfilter', function(req, res){
+	console.log("POST /historyfilter");
+	var start = req.body.startTime;
+	var end = req.body.endTime;
+	res.redirect(url.format({
+       pathname:"/passenger_triphistory",
+       query: {
+          "start": start,
+          "end": end
+        }
+     }));
 });
 
 app.listen(3000, function(){

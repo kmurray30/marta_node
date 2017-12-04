@@ -4,9 +4,9 @@ table, th, td {
 }
 
 table {
-	margin: 20px;
+	/*margin: 20px;*/
 	width: auto;
-	margin: 0 auto;
+	margin: 30px auto;
 }
 
 .selected {
