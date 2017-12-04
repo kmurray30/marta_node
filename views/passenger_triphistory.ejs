@@ -1,6 +1,7 @@
 <% include partials/header %>
 
-	    <link rel="stylesheet" href="style/tables.css">
+      <!-- <link rel="stylesheet" href="style/admin.css"> -->
+      <link rel="stylesheet" href="style/tables.css">
       <script src="js/sorttable.js"></script>
       <script src="js/tables.js"></script>
 
@@ -15,40 +16,97 @@
     <div class="container" id="window-cnt">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <h3 class="panel-title">Station Listing</h3>
+          <h3 class="panel-title">Breeze Card Management</h3>
         </div>
+        
         <form method="GET" action="/admin_main" class="back-btn">
           <button type="submit" class="btn btn-primary">Back</button>
         </form>
+        
+        <div class="error">
+          <% if(messages){ %>
+            <% messages.forEach(function(message){ %>
+              <%= message %> <br>
+            <% }) %>
+          <% } %>
+        </div>
+
+        <form method="POST" action="/filtercards">
+          <div class="container-fluid"> <!-- If Needed Left and Right Padding in 'md' and 'lg' screen means use container class -->
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Start Time </label>
+                </div>
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <input type="text" id="owner-input" name="owner" placeholder="" class="form-control">
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <button type="button" class="btn btn-info" id="reset-filter-btn" formaction="/nofilter">Reset</button>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Card Number </label>
+                </div>
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <input type="text" id="owner-input" name="cardnum" placeholder="" class="form-control" >
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <button type="button" class="btn btn-info" id="reset-filter-btn" formaction="/nofilter">Reset</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <label>Value Between </label>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    <input type="text" id="owner-input" name="low" placeholder="0" class="form-control" >
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                    and
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    <input type="text" id="owner-input" name="high" placeholder="inf" class="form-control" >
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <button type="submit" class="btn btn-info" id="update-filter-btn">Update Filter</button>
+                </div>
+            </div>
+          </div>
+        </form>
+
         <div class="">
           <table class="sortable">
             <tr>
-              <th>Station Name</th>
-              <th>Stop ID</th> 
-              <th>Fare</th>
-              <th>Status</th>
-            </tr>
-            <% if(stations){ %>
-              <% stations.forEach(function(station){ %>
-                <tr class='table-row' data=<%= station.StopID %>>
-                  <td>  <%= station.Name %>  </td>
-                  <td class="stationId">  <%= station.StopID %>  </td>
-                  <td>  <%= station.EnterFare %>  </td>
-                  <td>  <% if(station.ClosedStatus) { %> Closed <% } else { %> Open <% } %>  </td>
+              <th>Time</th>
+              <th>Source</th> 
+              <th>Destination</th>
+              <th>Fare Paid</th>
+              <th>Card #</th>
+            </tr> 
+            <% if(data){ %>
+              <% data.forEach(function(datum){ %> <!-- fields are Number, Value, Username, DateTime -->
+                <tr class='table-row' datum=<%= datum.Number %>>
+                  <td>  <%= datum.StartTime %>  </td>
+                  <td class="cardId">  $<%= datum.StartsStopID %>  </td>
+                  <td>  <%= datum.EndsStopID %>  </td>
+                  <td>  <%= datum.CurrentFare %>  </td>
+                  <td>  <%= datum.Number %>  </td>
                 </tr>
               <% }) %>
             <% } %>
           </table>
         </div>
-        <!-- <form method="GET" action="/admin_createstation" id="station-manage-btn"> -->
-          <div class="form-group button-group">
-            <button type="submit" class="btn btn-primary" id="create-new-station-btn">Create New Station</button>
-            <button class="btn btn-primary" id="view-station-btn" formaction="stationview">View Station</button> <!-- move these outside of form to stop url changing -->
-          </div>
-        <!-- </form> -->
       </div>
     </div>
   </body>
 
+  <!-- // <script src="js/admin.js"></script> -->
 
 <% include partials/footer %>
