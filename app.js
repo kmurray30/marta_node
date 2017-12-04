@@ -1049,7 +1049,10 @@ app.get('/removecard', function(req, res){
 	}
 
 	var cardnum = req.session.cardnum;
-	var sql = "DELETE FROM "
+	var sql = "DELETE FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
+	var query = db.query(sql, (err, result) => {
+		
+	}
 
 });
 
