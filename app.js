@@ -821,21 +821,25 @@ app.get('/admin_flowreport', function(req, res){
 	}
 
 
-	var startTime = req.query.starttime;
-	var endTime = req.query.endtime;
+	var startTime = req.query.start;
+	var endTime = req.query.end;
+
+	console.log("*** TIMES ****");
+	console.log(startTime);
+	console.log(endTime);
 
 	var dropFlowInSql = "DROP VIEW FlowIn";
 	var dropFlowOutSql = "DROP VIEW FlowOut";
 
 	var createFlowInSql = "CREATE VIEW FlowIn AS SELECT TRIP.StartsStopID AS StopID, SUM(STATION.EnterFare) AS Revenue, COUNT(*) As PassengersIn FROM TRIP, STATION JOIN TRIP t ON t.StartsStopID = STATION.StopID"
 	if(startTime && endTime) {
-            createFlowInSql += " WHERE StartTime > " + startTime + " AND StartTime < " + endTime;
+            createFlowInSql += " WHERE t.StartTime > '" + startTime + "' AND t.StartTime < '" + endTime + "'";
 	}
 	createFlowInSql += " GROUP BY TRIP.StartsStopID";
 
 	var createFlowOutSql = "CREATE VIEW FlowOut AS SELECT TRIP.EndsStopID AS StopID, COUNT(*) As PassengersOut FROM TRIP, STATION JOIN TRIP t ON t.EndsStopID = StopID"
 	if(startTime && endTime) {
-            createFlowOutSql += " WHERE StartTime > " + startTime + " AND StartTime < " + endTime;
+            createFlowOutSql += " WHERE t.StartTime > '" + startTime + "' AND t.StartTime < '" + endTime + "'";
 	}
 	createFlowOutSql += " GROUP BY TRIP.EndsStopID";
 
