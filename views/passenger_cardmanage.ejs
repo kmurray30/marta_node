@@ -18,7 +18,7 @@
           <h3 class="panel-title">Manage Cards</h3>
         </div>
         <form method="POST" action="/addcard" class="back-btn">
-          <button type="submit" class="btn btn-primary">Back</button>
+          <button type="submit" class="btn btn-primary" formaction='/passenger_main'>Back</button>
         </form>
         <h2 style="margin-left: 30px"> Breeze Cards </h2>
         <div class="">
@@ -55,6 +55,15 @@
                       <button type="submit" class="btn btn-primary" id="create-new-station-btn">Add Card</button>
                     </div>
                 </div>
+
+
+        <div class="error">
+          <% if(messages){ %>
+            <% messages.forEach(function(message){ %>
+              <%= message %> <br>
+            <% }) %>
+          <% } %>
+        </div>
 
           <div class="container-fluid" id="breeze-cnt">
             <div class="panel panel-info">

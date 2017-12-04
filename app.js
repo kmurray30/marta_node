@@ -606,8 +606,10 @@ app.get('/unlock', function(req, res){
 			console.log("Queried card from table. There should be a result but there isn't");
 			throw err;
 		}
-		if (!OldUser) {
-
+		if (!result[0].OldUser) {
+			req.session.messageQ.push("Previous user no longer exists");
+			res.redirect('/');
+			return
 		}
 		var origQuery = result;
 		// Delete all rows in this conflict with same card
@@ -718,13 +720,35 @@ app.get('/updatecardowner', function(req, res){
 		if(result.length < 1) {
 			req.session.messageQ.push("There is no passenger with this username");
 			res.redirect('/admin_cardmanage');
+			return;
 		} else {
-			sql = "UPDATE BREEZE_CARD SET Username = '" + newOwner + "' WHERE Number = '" + cardnum + "'";
+			sql = "SELECT Username FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
 			console.log(sql);
 			var query = db.query(sql, (err, result) => {
 				if(err) throw err;
-				req.session.messageQ.push("successfully updated owner to " + newOwner + " on card " + cardnum);
-				res.redirect('/admin_cardmanage');
+				var oldUser = result[0].Username;
+				sql = "SELECT * FROM BREEZE_CARD WHERE Username = '" + oldUser + "'";
+				console.log(sql);
+				var query = db.query(sql, (err, result) => {
+					if(err) throw err;
+					if (result.length < 2) {
+						req.session.messageQ.push("This is the previous user's last card. Cannot transfer");
+						res.redirect('/admin_cardmanage');
+						return;
+					}
+					sql = "DELETE FROM CONFLICT WHERE Number = '" + cardnum + "'";
+					console.log(sql);
+					var query = db.query(sql, (err, result) => {
+						sql = "UPDATE BREEZE_CARD SET Username = '" + newOwner + "' WHERE Number = '" + cardnum + "'";
+						console.log(sql);
+						var query = db.query(sql, (err, result) => {
+							if(err) throw err;
+							req.session.messageQ.push("successfully updated owner to " + newOwner + " on card " + cardnum);
+							res.redirect('/admin_cardmanage');
+							return;
+						});
+					});
+				});
 			});
 		}
 	});
@@ -1025,7 +1049,7 @@ app.get('/passenger_cardmanage', function(req, res){
 		return res.status(401).send();
 	}
 	if (!req.session.user) {
-		res.redirect('/')
+		res.redirect('/');
 		return
 	}
 
@@ -1033,11 +1057,18 @@ app.get('/passenger_cardmanage', function(req, res){
 
 	var sql = "SELECT Number, Value FROM BREEZE_CARD WHERE Username = '" + username + "'";
 	var query = db.query(sql, (err, result) => {
+		req.session.cardCount = result.length;
 		console.log('passenger_cardmanage')
+		messages = getMessages(req);
 		res.render('passenger_cardmanage', {
+			messages: messages,
 			cards: result
 		});
 	});
+});
+
+app.post('/passenger_main', function(req, res){
+	res.redirect('/passenger_main');
 });
 
 app.get('/removecard', function(req, res){
@@ -1050,11 +1081,23 @@ app.get('/removecard', function(req, res){
 		return
 	}
 
-	var cardnum = req.session.cardnum;
-	var sql = "DELETE FROM BREEZE_CARD WHERE Number = '" + cardnum + "'";
-	var query = db.query(sql, (err, result) => {
-
+	var cardnum = req.query.cardnum;
+	if (req.session.cardCount && req.session.cardCount > 1 ) {
+		var sql = "UPDATE BREEZE_CARD SET Username = NULL WHERE Number = '" + cardnum + "'";
+		console.log(sql);
+		var query = db.query(sql, (err, result) => {
+			if(err) throw err;
+			req.session.messageQ.push("Successfully deleted card " + cardnum);
+			res.redirect('/passenger_cardmanage');
+		});
+	} else {
+		req.session.messageQ.push("Action failed. Every user is required to have at least one Breeze Card");
+		res.redirect('/passenger_cardmanage');
 	}
+
+});
+
+app.post('/addcard', function(req, res) {
 
 });
 
