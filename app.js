@@ -1248,7 +1248,8 @@ app.get('/passenger_triphistory', function(req, res){
 	endTime = req.query.end;
 
 	var sql = "SELECT StartTime, StartsStopID, EndsStopID, CurrentFare, BREEZE_CARD.Number FROM TRIP LEFT JOIN BREEZE_CARD ON TRIP.Number = BREEZE_CARD.Number WHERE Username = '" + req.session.username + "'";
-	if(startTime) sql += " AND StartTime > '" + startTime + "' AND StartTime < '" + endTime + "'";
+	if(startTime) sql += " AND StartTime > '" + startTime + "'"
+	if(endTime) sql += " AND StartTime < '" + endTime + "'";
 	console.log(sql)
 	var query = db.query(sql, (err, result) => {
 		if(err) throw err;
