@@ -828,13 +828,13 @@ app.get('/admin_flowreport', function(req, res){
 	console.log(startTime);
 	console.log(endTime);
 
-	var createFlowInSql = "CREATE OR REPLACE VIEW FlowIn AS SELECT TRIP.StartsStopID AS StopID, SUM(STATION.EnterFare) AS Revenue, COUNT(*) As PassengersIn FROM TRIP, STATION JOIN TRIP t ON t.StartsStopID = STATION.StopID"
+	var createFlowInSql = "CREATE OR REPLACE VIEW FlowIn AS SELECT TRIP.StartsStopID AS StopID, SUM(TRIP.CurrentFare) AS Revenue, COUNT(*) As PassengersIn FROM TRIP JOIN STATION ON TRIP.StartsStopID = STATION.StopID"
 	if(startTime && endTime) {
             createFlowInSql += " WHERE t.StartTime > '" + startTime + "' AND t.StartTime < '" + endTime + "'";
 	}
 	createFlowInSql += " GROUP BY TRIP.StartsStopID";
 
-	var createFlowOutSql = "CREATE OR REPLACE VIEW FlowOut AS SELECT TRIP.EndsStopID AS StopID, COUNT(*) As PassengersOut FROM TRIP, STATION JOIN TRIP t ON t.EndsStopID = StopID"
+	var createFlowOutSql = "CREATE OR REPLACE VIEW FlowOut AS SELECT TRIP.EndsStopID AS StopID, COUNT(*) As PassengersOut FROM TRIP JOIN STATION ON TRIP.EndsStopID = StopID"
 	if(startTime && endTime) {
             createFlowOutSql += " WHERE t.StartTime > '" + startTime + "' AND t.StartTime < '" + endTime + "'";
 	}
